@@ -3,33 +3,36 @@ import axios from 'axios'
 import Card from './Card'
 
 
-const api_key = 'DEMO_KEY'
-const URL = `https://api.nasa.gov/planetary/apod?api_key=${api_key}`
+
+const URL = 'https://api.nasa.gov/planetary/apod?api_key=${api_key=DEMO_KEY}'
 
 
-function App() {
-  const [apod, setApod] = useState()
+export default function App() {
+  const [data, setData] = useState()
 
-  useEffect( () => {
+  useEffect(() => {
+    function fetchAPOD(){
     axios.get(URL)
       .then(response => {
-        setApod(response.data)
+        setData(response.data)
       })
       .catch(error => {
-        console.log('Error fetching APOD data', error)
+        console.log(error.message)
       
     })
-   
+  }
+   fetchAPOD()
   }, [])
 
-  if (!apod) return 'fetching Photo of the day...'
+  if (!data) return <p>Fetching data...</p>
   return (
     <section>
       <Card
-      title={apod.title}
-      text={apod.explanation}
-      imageURL={apod.url}
-      date={apod.date}
+      title={data.title}
+      text={data.explanation}
+      image={data.url}
+      author={data.copyright}
+      date={data.date}
       
       />
       
@@ -37,4 +40,4 @@ function App() {
   )
 }
 
-export default App
+
